@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const initialMovie = {
@@ -28,8 +28,14 @@ const UpdateForm = props => {
   const handleSubmit = e => {
     e.preventDefault();
     setMovie((movie.stars = movie.stars.split(" ")));
-    setMovie(initialMovie);
-    console.log(movie);
+
+    axios
+      .put(`http://localhost:5000/api/movies/${props.match.params.id}`, movie)
+      .then(res => {
+        console.log(res);
+        setMovie(initialMovie);
+        props.history.push("/");
+      });
   };
 
   return (
@@ -40,8 +46,7 @@ const UpdateForm = props => {
           type="number"
           name="id"
           placeholder="Enter the ID"
-          value={movie.id}
-          onChange={handleChange}
+          value={props.match.params.id}
         />
         <input
           type="text"
